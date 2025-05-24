@@ -1,0 +1,83 @@
+<mat-progress-bar
+  *ngIf="loading"
+  mode="indeterminate"
+  color="primary"
+></mat-progress-bar>
+
+<div style="padding: 0 24px;">
+  <mat-card class="task-container">
+    <form [formGroup]="form" (ngSubmit)="createTask()">
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Assigned To</mat-label>
+        <input matInput formControlName="assignedTo" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Due Date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dueDate"
+          readonly
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid"
+      >
+        Add Task
+      </button>
+    </form>
+  </mat-card>
+
+  <mat-card *ngIf="tasks.length > 0">
+    <mat-card-title>Tasks List for {{ projectName }}</mat-card-title>
+    <mat-list>
+      <mat-list-item *ngFor="let task of tasks">
+        <div style="display: flex; align-items: center; width: 100%;">
+          <mat-checkbox
+            [checked]="task.isCompleted"
+            (change)="toggleCompletion(task)"
+            style="margin-right: 16px;"
+          ></mat-checkbox>
+
+          <div class="task-details" style="flex: 1;">
+            <h4 style="margin: 0;">{{ task.title }}</h4>
+            <p style="margin: 0;">
+              Assigned to: {{ task.assignedTo }} | Due:
+              {{ task.dueDate | date: 'mediumDate' }}
+            </p>
+          </div>
+
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteTask(task.id)"
+            style="margin-left: 16px;"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+
+  <mat-card *ngIf="!loading && tasks.length === 0">
+    <mat-card-title>Task List for {{ projectName }}</mat-card-title>
+    <mat-card-content>
+      <p style="color: gray; margin: 16px 0;">
+        No tasks found for this project.
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

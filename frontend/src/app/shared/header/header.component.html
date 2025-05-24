@@ -1,0 +1,9 @@
+<mat-toolbar color="primary">
+  <span class="app-title">Mini Project Tracker</span>
+  <span class="spacer"></span>
+
+  <ng-container *ngIf="authService.isLoggedIn()">
+    <a mat-button routerLink="/projects">Projects</a>
+    <a mat-button (click)="logout()">Logout</a>
+  </ng-container>
+</mat-toolbar>
